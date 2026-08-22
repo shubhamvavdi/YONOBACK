@@ -30,9 +30,15 @@ async function loadFrontendGames(): Promise<FrontendGame[]> {
 
   const moduleUrl = pathToFileURL(dataPath).href;
 
-  const module = await import(moduleUrl);
+  try {
+    const module = await import(moduleUrl);
 
-  return module.gamesData as FrontendGame[];
+    return module.gamesData as FrontendGame[];
+  } catch (error) {
+    console.warn("Frontend games catalogue not found; skipping game seed.");
+    console.warn(error);
+    return [];
+  }
 }
 
 const main = async () => {

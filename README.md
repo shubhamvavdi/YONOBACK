@@ -1,6 +1,6 @@
 # Yono Backend
 
-Node.js + Express + Prisma + SQLite backend for managing Yono game/app listings.
+Node.js + Express + Prisma + PostgreSQL backend for managing Yono game/app listings.
 
 ## Setup
 
@@ -12,7 +12,7 @@ Node.js + Express + Prisma + SQLite backend for managing Yono game/app listings.
 npm install
 ```
 
-4. Create the database and admin account:
+4. Create the database schema and admin account:
 
 ```bash
 npm run db:setup
@@ -25,6 +25,20 @@ npm run dev
 ```
 
 Server: `http://localhost:4000`
+
+## Deploy on Render
+
+The repository includes `render.yaml`, which creates a Render PostgreSQL database and
+configures the backend service. In Render, create a Blueprint from this repository and
+set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `CORS_ORIGIN` when prompted. The service runs
+Prisma migrations and seeds the admin account and games before starting the API.
+When deploying only this backend repository, the seed still creates the admin account;
+the games catalogue is loaded when the sibling frontend catalogue is present.
+
+For a manual web service, leave the Root Directory empty, use `npm ci && npm run build`
+as the Build Command, `npm run prisma:deploy && npm run prisma:seed` as the Pre-Deploy
+Command, and `npm start` as the Start Command. Set `DATABASE_URL` to the internal
+connection string from the Render PostgreSQL database.
 
 ## Admin UI
 
